@@ -1,4 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import "whatwg-fetch";
+
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
+
+import { callGraphApiAsync } from "../services/auth";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
@@ -6,14 +13,12 @@ const httpTrigger: AzureFunction = async function (
 ): Promise<void> {
   context.log("HTTP trigger function processed a request.");
 
-  const name = req.query.name || (req.body && req.body.name);
-  const responseMessage = name
-    ? "Hello, " + name + ". This HTTP triggered function executed successfully."
-    : "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
+  const users = await callGraphApiAsync("/users");
+
+  console.log("users", users);
 
   context.res = {
-    // status: 200, /* Defaults to 200 */
-    body: responseMessage,
+    body: users,
   };
 };
 
