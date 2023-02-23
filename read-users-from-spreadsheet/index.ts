@@ -1,3 +1,5 @@
+import "module-alias/register";
+
 import "whatwg-fetch";
 import dotenv from "dotenv";
 dotenv.config();

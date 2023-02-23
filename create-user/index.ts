@@ -1,10 +1,12 @@
+import "module-alias/register";
+
 import "whatwg-fetch";
 import dotenv from "dotenv";
 dotenv.config();
 
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 
-import { getGraphApiAsync } from "~/services/auth";
+// import { getGraphApiAsync } from "~/services/auth";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
@@ -12,12 +14,12 @@ const httpTrigger: AzureFunction = async function (
 ): Promise<void> {
   context.log("HTTP trigger function processed a request.");
 
-  const users = await getGraphApiAsync("/users");
+  // const users = await getGraphApiAsync("/users");
 
-  console.log("users", users);
+  context.log(req.body);
 
   context.res = {
-    body: users,
+    body: "OK",
   };
 };
 
