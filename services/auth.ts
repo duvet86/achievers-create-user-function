@@ -1,9 +1,10 @@
-import {
-  ConfidentialClientApplication,
+import type {
   Configuration,
   ClientCredentialRequest,
   AuthenticationResult,
 } from "@azure/msal-node";
+
+import { ConfidentialClientApplication } from "@azure/msal-node";
 
 import invariant from "tiny-invariant";
 

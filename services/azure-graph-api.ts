@@ -2,14 +2,15 @@ import { getGraphApiAsync } from "~/services/auth";
 
 export interface AzureUser {
   id: string;
+  userPrincipalName: string;
   createdDateTime: string;
-  displayName: string;
+  mail: string;
 }
 
-export async function getAzureUserByName(
-  displayName: string
+export async function getAzureUserByMailAsync(
+  mail: string
 ): Promise<AzureUser[]> {
   return await getGraphApiAsync<AzureUser[]>(
-    `/users?$search="displayName:${displayName}"`
+    `/users?$filter=mail eq '${mail}'`
   );
 }

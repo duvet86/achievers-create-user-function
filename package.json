@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@azure/functions": "^3.5.0",
+    "@types/mysql": "^2.15.21",
     "@types/node": "^18.14.0",
-    "@types/parse-multipart": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "dotenv": "^16.0.3",
@@ -32,9 +32,8 @@
   },
   "dependencies": {
     "@azure/msal-node": "^1.15.0",
-    "parse-multipart": "^1.0.4",
-    "whatwg-fetch": "^3.6.2",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
+    "mysql": "^2.18.1",
+    "whatwg-fetch": "^3.6.2"
   },
   "_moduleAliases": {
     "@root": ".",
