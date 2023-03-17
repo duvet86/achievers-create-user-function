@@ -41,4 +41,4 @@ jobs:
           app-name: 'achievers'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E909DB4751CD46849A710FCD1368A682 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2F0BD5B1E5004DB9884CD053234260C6 }}
