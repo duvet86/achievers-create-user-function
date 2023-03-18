@@ -1,4 +1,5 @@
 import type { AzureFunction, Context, HttpRequest } from "@azure/functions";
+import type { UserForm } from "./models";
 
 import "module-alias/register";
 
@@ -6,23 +7,40 @@ import "whatwg-fetch";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { getGraphApiAsync } from "~/services/auth";
+import { getAzureUserByMailAsync, HTTP_STATUS_CODES } from "~/services";
+
+import { createEOIUsersAsync } from "./services/dbcontext";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
   context.log("HTTP trigger function processed a request.");
+  context.log(req.body);
 
-  // const userFormResponse:  = req.body;
+  const userFormResponse: UserForm = req.body;
 
-  // const users = await getAzureUserByMailAsync("/users");
+  const userEmail = userFormResponse["EMAIL:"];
 
-  console.log(req.body);
+  const azureUser = await getAzureUserByMailAsync(userEmail);
 
-  context.res = {
-    body: "OK",
-  };
+  if (azureUser !== null) {
+    context.res = {
+      status: HTTP_STATUS_CODES.CONFLICT,
+      body: {
+        message: `User with email: '${userEmail}' already exists.`,
+      },
+    };
+  } else {
+    const id = await createEOIUsersAsync(userFormResponse);
+
+    context.res = {
+      status: HTTP_STATUS_CODES.CREATED,
+      body: {
+        id,
+      },
+    };
+  }
 };
 
 export default httpTrigger;
