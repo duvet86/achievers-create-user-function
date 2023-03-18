@@ -67,3 +67,28 @@ export interface UserForm {
   "I am over 18 years of age:": YesNoAnswer; // user
   "To the best of my knowledge all details I have provided on this form are true and correct. I understand that submission of this form does not guarantee me a volunteer role at the Achievers Club WA:": YesNoAnswer[];
 }
+
+export interface UserEOIForm {
+  bestTimeToContact: string;
+  occupation: string;
+  volunteerExperience: string;
+  interestedInRole: string;
+  mentoringLevel: string;
+  hearAboutUs: string;
+  mentorOrVolunteer: string;
+  preferredLocation: string;
+  preferredFrequency: string;
+  isOver18: boolean;
+  referee1FirstName: string;
+  referee1Surname: string;
+  referee1Mobile: string;
+  referee1Email: string;
+  referee1BestTimeToContact: string;
+  referee1Relationship: string;
+  referee2FirstName: string;
+  referee2Surname: string;
+  referee2Mobile: string;
+  referee2Email: string;
+  referee2BestTimeToContact: string;
+  referee2Relationship: string;
+}
