@@ -68,7 +68,12 @@ export interface UserForm {
   "To the best of my knowledge all details I have provided on this form are true and correct. I understand that submission of this form does not guarantee me a volunteer role at the Achievers Club WA:": YesNoAnswer[];
 }
 
-export interface UserEOIForm {
+export type UserEOIForm = {
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  email: string;
+  address: string;
   bestTimeToContact: string;
   occupation: string;
   volunteerExperience: string;
@@ -91,4 +96,4 @@ export interface UserEOIForm {
   referee2Email: string;
   referee2BestTimeToContact: string;
   referee2Relationship: string;
-}
+};

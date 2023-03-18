@@ -47,6 +47,18 @@ export async function createEOIUsersAsync(user: UserForm): Promise<number> {
   let userEOIId = -1;
 
   const userEOIForm: UserEOIForm = {
+    firstName: user["FIRST NAME:"],
+    lastName: user["LAST NAME:"],
+    mobile: user["MOBILE:"],
+    email: user["EMAIL:"],
+    address:
+      user["ADDRESS - STATE:"] +
+      ", " +
+      user["ADDRESS - SUBURB:"] +
+      ", " +
+      user["ADDRESS - STREET:"] +
+      ", " +
+      user["ADDRESS - POSTCODE:"],
     bestTimeToContact: user["When is the best time to contact you?"],
     occupation: user["Current occupation:"],
     volunteerExperience: user["Relevant work/volunteer experience (if any):"],
