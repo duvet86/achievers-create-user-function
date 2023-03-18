@@ -21,7 +21,7 @@ const config: ConnectionConfig = {
   port: 3306,
   ssl: {
     ca: fs.readFileSync(
-      path.join(__dirname, "BaltimoreCyberTrustRoot.crt.pem")
+      path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem")
     ),
   },
 };
