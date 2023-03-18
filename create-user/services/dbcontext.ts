@@ -1,7 +1,7 @@
 import type { UserEOIForm, UserForm } from "../models";
 
-import fs from "fs";
-import path from "path";
+// import fs from "fs";
+// import path from "path";
 
 import type { Connection, ConnectionConfig } from "mysql";
 
@@ -19,11 +19,11 @@ const config: ConnectionConfig = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   port: 3306,
-  ssl: {
-    ca: fs.readFileSync(
-      path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem")
-    ),
-  },
+  // ssl: {
+  //   ca: fs.readFileSync(
+  //     path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem")
+  //   ),
+  // },
 };
 
 function getConnectionAsync(): Promise<Connection> {
