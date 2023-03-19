@@ -1,11 +1,7 @@
+import type { Connection, ResultSetHeader } from "mysql2/promise";
 import type { UserEOIForm, UserForm } from "../models";
 
-// import fs from "fs";
-// import path from "path";
-
-import type { Connection, ConnectionConfig } from "mysql";
-
-import { createConnection } from "mysql";
+import { createConnection } from "mysql2/promise";
 import invariant from "tiny-invariant";
 
 invariant(process.env.DATABASE_HOST);
@@ -13,38 +9,30 @@ invariant(process.env.DATABASE_USER);
 invariant(process.env.DATABASE_PASSWORD);
 invariant(process.env.DATABASE_NAME);
 
-const config: ConnectionConfig = {
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  port: 3306,
-  // ssl: {
-  //   ca: fs.readFileSync(
-  //     path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem")
-  //   ),
-  // },
-};
+// const serverCa = [
+//   fs.readFileSync(
+//     path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem"),
+//     "utf8"
+//   ),
+// ];
 
-function getConnectionAsync(): Promise<Connection> {
-  const conn = createConnection(config);
-
-  return new Promise<Connection>((resolve, reject) => {
-    conn.connect((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("Connection established.");
-        resolve(conn);
-      }
-    });
+async function getConnectionAsync(): Promise<Connection> {
+  const connection = await createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    // ssl: {
+    //   rejectUnauthorized: true,
+    //   ca: serverCa,
+    // },
   });
+
+  return connection;
 }
 
 export async function createEOIUsersAsync(user: UserForm): Promise<number> {
   const connection = await getConnectionAsync();
-
-  let userEOIId = -1;
 
   const userEOIForm: UserEOIForm = {
     firstName: user["FIRST NAME:"],
@@ -94,25 +82,68 @@ export async function createEOIUsersAsync(user: UserForm): Promise<number> {
     referee2Relationship: user["REFEREE 2 - How they know you:"],
   };
 
-  return new Promise<number>((resolve, reject) => {
-    connection.query(
-      "INSERT INTO UserEOIForm SET ?",
-      userEOIForm,
-      (err, results) => {
-        if (err) {
-          reject(err);
-        } else {
-          userEOIId = results.insertId;
-        }
-      }
-    );
+  const [resultSetHeader] = await connection.query<ResultSetHeader>(
+    `INSERT INTO UserEOIForm (
+        firstName,
+        lastName,
+        mobile,
+        email,
+        address,
+        bestTimeToContact,
+        occupation,
+        volunteerExperience,
+        interestedInRole,
+        mentoringLevel,
+        hearAboutUs,
+        mentorOrVolunteer,
+        preferredLocation,
+        preferredFrequency,
+        isOver18,
+        referee1FirstName,
+        referee1Surname,
+        referee1Mobile,
+        referee1Email,
+        referee1BestTimeToContact,
+        referee1Relationship,
+        referee2FirstName,
+        referee2Surname,
+        referee2Mobile,
+        referee2Email,
+        referee2BestTimeToContact,
+        referee2Relationship)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [
+      userEOIForm.firstName,
+      userEOIForm.lastName,
+      userEOIForm.mobile,
+      userEOIForm.email,
+      userEOIForm.address,
+      userEOIForm.bestTimeToContact,
+      userEOIForm.occupation,
+      userEOIForm.volunteerExperience,
+      userEOIForm.interestedInRole,
+      userEOIForm.mentoringLevel,
+      userEOIForm.hearAboutUs,
+      userEOIForm.mentorOrVolunteer,
+      userEOIForm.preferredLocation,
+      userEOIForm.preferredFrequency,
+      userEOIForm.isOver18,
+      userEOIForm.referee1FirstName,
+      userEOIForm.referee1Surname,
+      userEOIForm.referee1Mobile,
+      userEOIForm.referee1Email,
+      userEOIForm.referee1BestTimeToContact,
+      userEOIForm.referee1Relationship,
+      userEOIForm.referee2FirstName,
+      userEOIForm.referee2Surname,
+      userEOIForm.referee2Mobile,
+      userEOIForm.referee2Email,
+      userEOIForm.referee2BestTimeToContact,
+      userEOIForm.referee2Relationship,
+    ]
+  );
 
-    connection.end((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(userEOIId);
-      }
-    });
-  });
+  await connection.end();
+
+  return resultSetHeader.insertId;
 }
