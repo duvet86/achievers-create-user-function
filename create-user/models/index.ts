@@ -1,3 +1,5 @@
+import type { RowDataPacket } from "mysql2/promise";
+
 export type State =
   | "Western Australia"
   | "Victoria"
@@ -66,34 +68,62 @@ export interface UserForm {
   "REFEREE 2 - How they know you:": string; // user form
   "I am over 18 years of age:": YesNoAnswer; // user
   "To the best of my knowledge all details I have provided on this form are true and correct. I understand that submission of this form does not guarantee me a volunteer role at the Achievers Club WA:": YesNoAnswer[];
+  "TELL US ABOUT YOU:": string | undefined;
 }
 
-export type UserEOIForm = {
+export interface User {
+  azureADId: string | null;
+  email: string;
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  addressStreet: string;
+  addressSuburb: string;
+  addressState: string;
+  addressPostcode: string;
+  additionalEmail: string | null;
+  dateOfBirth: Date | null;
+  emergencyContactName: string | null;
+  emergencyContactNumber: string | null;
+  emergencyContactAddress: string | null;
+  emergencyContactRelationship: string | null;
+  profilePicturePath: string | null;
+  endDate: Date | null;
+  chapterId: string;
+}
+
+export interface EoIProfile {
+  bestTimeToContact: string;
+  occupation: string;
+  volunteerExperience: string;
+  role: string;
+  mentoringLevel: string;
+  heardAboutUs: string;
+  preferredFrequency: string;
+  isOver18: boolean;
+  comment: string;
+  aboutMe: string | null;
+  userId: number;
+}
+
+export interface Reference {
   firstName: string;
   lastName: string;
   mobile: string;
   email: string;
-  address: string;
   bestTimeToContact: string;
-  occupation: string;
-  volunteerExperience: string;
-  interestedInRole: string;
-  mentoringLevel: string;
-  hearAboutUs: string;
-  mentorOrVolunteer: string;
-  preferredLocation: string;
-  preferredFrequency: string;
-  isOver18: boolean;
-  referee1FirstName: string;
-  referee1Surname: string;
-  referee1Mobile: string;
-  referee1Email: string;
-  referee1BestTimeToContact: string;
-  referee1Relationship: string;
-  referee2FirstName: string;
-  referee2Surname: string;
-  referee2Mobile: string;
-  referee2Email: string;
-  referee2BestTimeToContact: string;
-  referee2Relationship: string;
-};
+  relationship: string;
+  generalComment: string | null;
+  outcomeComment: string | null;
+  hasKnowApplicantForAYear: boolean | null;
+  isRelated: boolean | null;
+  isMentorRecommended: boolean | null;
+  calledBy: string | null;
+  calledOndate: Date | null;
+  userId: number;
+}
+
+export interface Chapter extends RowDataPacket {
+  id: string;
+  name: string;
+}
