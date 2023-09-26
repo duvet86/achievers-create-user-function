@@ -40,10 +40,12 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
 
   const preferredChapter = chapters.find(
     (c) =>
-      c.name ===
+      c.name.trim().toLowerCase() ===
       userForm[
         "We operate out of two locations, where would you prefer to mentor or volunteer?"
       ]
+        .trim()
+        .toLowerCase()
   );
 
   const dbUser: User = {
