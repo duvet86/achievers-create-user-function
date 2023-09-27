@@ -1,5 +1,4 @@
 import type { Connection, ResultSetHeader } from "mysql2/promise";
-import type { Context } from "@azure/functions";
 import type { UserForm, User, EoIProfile, Chapter, Reference } from "../models";
 
 import { createConnection } from "mysql2/promise";
@@ -32,10 +31,7 @@ async function getConnectionAsync(): Promise<Connection> {
   return connection;
 }
 
-export async function createEOIUsersAsync(
-  userForm: UserForm,
-  context: Context,
-): Promise<number> {
+export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
   const connection = await getConnectionAsync();
 
   await connection.beginTransaction();
@@ -45,10 +41,8 @@ export async function createEOIUsersAsync(
   const selectedChapter = userForm[
     "We operate out of two locations, where would you prefer to mentor or volunteer?"
   ]
-    ?.trim()
-    ?.toLowerCase();
-
-  context.log(`Chapter from form: ${selectedChapter}`);
+    .trim()
+    .toLowerCase();
 
   const preferredChapter = chapters.find(
     (c) => c.name.trim().toLowerCase() === selectedChapter,

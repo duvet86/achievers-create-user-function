@@ -32,7 +32,7 @@ const httpTrigger: AzureFunction = async function (
       },
     };
   } else {
-    const id = await createEOIUsersAsync(userFormResponse, context);
+    const id = await createEOIUsersAsync(userFormResponse);
 
     context.res = {
       status: HTTP_STATUS_CODES.CREATED,
