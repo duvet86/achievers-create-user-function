@@ -13,7 +13,7 @@ import { createEOIUsersAsync } from "./services/dbcontext";
 
 const httpTrigger: AzureFunction = async function (
   context: Context,
-  req: HttpRequest
+  req: HttpRequest,
 ): Promise<void> {
   context.log("HTTP trigger function processed a request.");
   context.log(req.body);
@@ -32,7 +32,7 @@ const httpTrigger: AzureFunction = async function (
       },
     };
   } else {
-    const id = await createEOIUsersAsync(userFormResponse);
+    const id = await createEOIUsersAsync(userFormResponse, context);
 
     context.res = {
       status: HTTP_STATUS_CODES.CREATED,

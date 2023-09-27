@@ -1,4 +1,5 @@
 import type { Connection, ResultSetHeader } from "mysql2/promise";
+import type { Context } from "@azure/functions";
 import type { UserForm, User, EoIProfile, Chapter, Reference } from "../models";
 
 import { createConnection } from "mysql2/promise";
@@ -31,21 +32,26 @@ async function getConnectionAsync(): Promise<Connection> {
   return connection;
 }
 
-export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
+export async function createEOIUsersAsync(
+  userForm: UserForm,
+  context: Context,
+): Promise<number> {
   const connection = await getConnectionAsync();
 
   await connection.beginTransaction();
 
   const [chapters] = await connection.query<Chapter[]>("SELECT * FROM Chapter");
 
+  const selectedChapter = userForm[
+    "We operate out of two locations, where would you prefer to mentor or volunteer?"
+  ]
+    ?.trim()
+    ?.toLowerCase();
+
+  context.log(`Chapter from form: ${selectedChapter}`);
+
   const preferredChapter = chapters.find(
-    (c) =>
-      c.name.trim().toLowerCase() ===
-      userForm[
-        "We operate out of two locations, where would you prefer to mentor or volunteer?"
-      ]
-        .trim()
-        .toLowerCase()
+    (c) => c.name.trim().toLowerCase() === selectedChapter,
   );
 
   const dbUser: User = {
@@ -109,7 +115,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbUser.profilePicturePath,
       dbUser.endDate,
       new Date(),
-    ]
+    ],
   );
 
   const dbEoIProfile: EoIProfile = {
@@ -120,7 +126,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     role: userForm["What role(s) would you be interested in?"].join(", "),
     mentoringLevel:
       userForm["What level(s) would you be comfortable mentoring at?"].join(
-        ", "
+        ", ",
       ),
     heardAboutUs: userForm["Where did you hear about us?"].join(", "),
     preferredFrequency:
@@ -161,7 +167,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbEoIProfile.aboutMe,
       dbEoIProfile.userId,
       new Date(),
-    ]
+    ],
   );
 
   const dbReference1: Reference = {
@@ -251,7 +257,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbReference2.calledOndate,
       dbReference2.userId,
       new Date(),
-    ]
+    ],
   );
 
   await connection.query<ResultSetHeader>(
@@ -261,7 +267,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       assignedAt,
       assignedBy)
       VALUES (?,?,?,?)`,
-    [dbUser.chapterId, resultSetHeader.insertId, new Date(), "eoi-submission"]
+    [dbUser.chapterId, resultSetHeader.insertId, new Date(), "eoi-submission"],
   );
 
   await connection.commit();
