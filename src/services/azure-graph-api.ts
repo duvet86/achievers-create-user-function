@@ -1,4 +1,4 @@
-import { getGraphApiAsync, postGraphApiAsync } from "~/services/auth";
+import { getGraphApiAsync, postGraphApiAsync } from "~/src/services/auth";
 
 export interface AzureUser {
   id: string;
@@ -28,7 +28,7 @@ export interface AzureInviteResponse {
           name: string | null;
           address: string | null;
         };
-      }
+      },
     ];
     customizedMessageBody: string | null;
   };
@@ -38,21 +38,21 @@ export interface AzureInviteResponse {
 }
 
 export async function getAzureUserByMailAsync(
-  mail: string
+  mail: string,
 ): Promise<AzureUser | null> {
   const azureUsers = await getGraphApiAsync<AzureUser[]>(
-    `/users?$filter=mail eq '${mail.trim()}'`
+    `/users?$filter=mail eq '${mail.trim()}'`,
   );
 
   return azureUsers[0] ?? null;
 }
 
 export async function inviteUserToAzureAsync(
-  azureInviteRequest: AzureInviteRequest
+  azureInviteRequest: AzureInviteRequest,
 ): Promise<AzureInviteResponse> {
   const response = await postGraphApiAsync<AzureInviteResponse>(
     "/invitations",
-    azureInviteRequest
+    azureInviteRequest,
   );
 
   return response;
