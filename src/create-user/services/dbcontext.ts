@@ -39,7 +39,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
   const [chapters] = await connection.query<Chapter[]>("SELECT * FROM Chapter");
 
   const selectedChapter = userForm[
-    "We operate out of two locations, where would you prefer to mentor or volunteer?"
+    "We operate out of the following locations, where would you prefer to mentor or volunteer?"
   ]
     .trim()
     .toLowerCase();
@@ -125,7 +125,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     heardAboutUs: userForm["Where did you hear about us?"].join(", "),
     preferredFrequency:
       userForm[
-        "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often do you think you will be able to attend? "
+        "Our homework club runs from 10: 00 AM to 12: 00 PM every Saturday during school term-time. How often do you think you will be able to attend? "
       ].join(" - "),
     isOver18: userForm["I am over 18 years of age:"] === "Yes",
     comment: userForm["Why would you like to become a Mentor or Volunteer?"],
