@@ -53,7 +53,7 @@ export interface UserForm {
   "Where did you hear about us?": HearAboutUs[]; // user form
   "Why would you like to become a Mentor or Volunteer?": string; // user form
   "We operate out of the following locations, where would you prefer to mentor or volunteer?": Location; // user form
-  "Our homework club runs from 10: 00 AM to 12: 00 PM every Saturday during school term-time. How often do you think you will be able to attend? ": Frequency[]; // user form
+  "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often do you think you will be able to attend? ": Frequency[]; // user form
   "REFEREE 1 - First Name:": string; // user form
   "REFEREE 1 - Surname:": string; // user form
   "REFEREE 1 - Mobile:": string; // user form
