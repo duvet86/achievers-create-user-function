@@ -88,8 +88,9 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
         emergencyContactRelationship,
         profilePicturePath,
         endDate,
-        updatedAt)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        updatedAt,
+        chapterId)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbUser.azureADId,
       dbUser.email,
@@ -109,6 +110,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbUser.profilePicturePath,
       dbUser.endDate,
       new Date(),
+      dbUser.chapterId,
     ],
   );
 
@@ -252,16 +254,6 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbReference2.userId,
       new Date(),
     ],
-  );
-
-  await connection.query<ResultSetHeader>(
-    `INSERT INTO useratchapter (
-      chapterId,
-      userId,
-      assignedAt,
-      assignedBy)
-      VALUES (?,?,?,?)`,
-    [dbUser.chapterId, resultSetHeader.insertId, new Date(), "eoi-submission"],
   );
 
   await connection.commit();
