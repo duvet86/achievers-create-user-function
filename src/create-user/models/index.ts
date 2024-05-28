@@ -50,6 +50,7 @@ export interface UserForm {
   "Relevant work/volunteer experience (if any):": string; // user form
   "What role(s) would you be interested in?": Role[]; // user form
   "What level(s) would you be comfortable mentoring at?": MentoringLevel[]; // user form
+  "If you have indicated that you are comfortable mentoring a student at year 10 or above, what subjects are you most comfortable concentrating on?": string[];
   "Where did you hear about us?": HearAboutUs[]; // user form
   "Why would you like to become a Mentor or Volunteer?": string; // user form
   "We operate out of the following locations, where would you prefer to mentor or volunteer?": Location; // user form
@@ -100,6 +101,7 @@ export interface EoIProfile {
   mentoringLevel: string;
   heardAboutUs: string;
   preferredFrequency: string;
+  preferredSubject: string;
   isOver18: boolean;
   comment: string;
   aboutMe: string | null;
