@@ -129,6 +129,10 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       userForm[
         "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often do you think you will be able to attend? "
       ].join(" - "),
+    preferredSubject:
+      userForm[
+        "If you have indicated that you are comfortable mentoring a student at year 10 or above, what subjects are you most comfortable concentrating on?"
+      ].join(", "),
     isOver18: userForm["I am over 18 years of age:"] === "Yes",
     comment: userForm["Why would you like to become a Mentor or Volunteer?"],
     aboutMe: userForm["TELL US ABOUT YOU:"] ?? null,
@@ -144,6 +148,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
         mentoringLevel,
         heardAboutUs,
         preferredFrequency,
+        preferredSubject,
         isOver18,
         comment,
         aboutMe,
