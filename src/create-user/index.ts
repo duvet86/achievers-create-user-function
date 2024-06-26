@@ -13,31 +13,39 @@ export async function createUser(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  context.log("HTTP trigger function processed a request.");
+  try {
+    context.log("HTTP trigger function processed a request.");
 
-  const userFormResponse = (await request.json()) as UserForm;
+    const userFormResponse = (await request.json()) as UserForm;
 
-  context.log(userFormResponse);
+    context.log(userFormResponse);
 
-  const userEmail = userFormResponse["EMAIL:"];
+    const userEmail = userFormResponse["EMAIL:"];
 
-  const azureUser = await getAzureUserByMailAsync(userEmail);
+    const azureUser = await getAzureUserByMailAsync(userEmail);
 
-  if (azureUser !== null) {
+    if (azureUser !== null) {
+      return {
+        status: HTTP_STATUS_CODES.CONFLICT,
+        body: JSON.stringify({
+          message: `User with email: '${userEmail}' already exists.`,
+        }),
+      };
+    }
+
+    const id = await createEOIUsersAsync(userFormResponse);
+
     return {
-      status: HTTP_STATUS_CODES.CONFLICT,
+      status: HTTP_STATUS_CODES.CREATED,
       body: JSON.stringify({
-        message: `User with email: '${userEmail}' already exists.`,
+        id,
       }),
     };
+  } catch (e) {
+    context.error(e);
   }
 
-  const id = await createEOIUsersAsync(userFormResponse);
-
   return {
-    status: HTTP_STATUS_CODES.CREATED,
-    body: JSON.stringify({
-      id,
-    }),
+    status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
   };
 }

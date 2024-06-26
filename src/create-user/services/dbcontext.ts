@@ -154,7 +154,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
         aboutMe,
         userId,
         updatedAt)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbEoIProfile.bestTimeToContact,
       dbEoIProfile.occupation,
@@ -163,6 +163,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
       dbEoIProfile.mentoringLevel,
       dbEoIProfile.heardAboutUs,
       dbEoIProfile.preferredFrequency,
+      dbEoIProfile.preferredSubject,
       dbEoIProfile.isOver18,
       dbEoIProfile.comment,
       dbEoIProfile.aboutMe,
