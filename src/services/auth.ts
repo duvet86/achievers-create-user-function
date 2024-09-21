@@ -49,7 +49,7 @@ export async function getGraphApiAsync<T>(endpoint: string): Promise<T> {
 
   const response = await fetch(
     `${process.env.GRAPH_ENDPOINT}/v1.0${endpoint}`,
-    options
+    options,
   );
 
   return await response.json();
@@ -57,7 +57,7 @@ export async function getGraphApiAsync<T>(endpoint: string): Promise<T> {
 
 export async function postGraphApiAsync<T>(
   endpoint: string,
-  body: unknown
+  body: unknown,
 ): Promise<T> {
   const accessTokenResponse = await getTokenAsync();
 
@@ -77,7 +77,7 @@ export async function postGraphApiAsync<T>(
 
   const response = await fetch(
     `${process.env.GRAPH_ENDPOINT}/v1.0${endpoint}`,
-    options
+    options,
   );
 
   return await response.json();
