@@ -3,18 +3,18 @@ import type {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import type { UserForm } from "./models";
+import type { UserForm } from "../models/user";
 
 import { HTTP_STATUS_CODES, getAzureUserByMailAsync } from "~/src/services";
 
-import { createEOIUsersAsync } from "./services/dbcontext";
+import { createEOIMentorAsync } from "./create-mentor.dbcontext";
 
-export async function createUser(
+export async function createMentor(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
-    context.log("HTTP trigger function processed a request.");
+    context.log("HTTP createUser function processed a request.");
 
     const userFormResponse = (await request.json()) as UserForm;
 
@@ -33,7 +33,7 @@ export async function createUser(
       };
     }
 
-    const id = await createEOIUsersAsync(userFormResponse);
+    const id = await createEOIMentorAsync(userFormResponse);
 
     return {
       status: HTTP_STATUS_CODES.CREATED,

@@ -1,5 +1,11 @@
 import type { Connection, ResultSetHeader } from "mysql2/promise";
-import type { UserForm, User, EoIProfile, Chapter, Reference } from "../models";
+import type {
+  UserForm,
+  DBUser,
+  DBEoIProfile,
+  DBChapter,
+  DBReference,
+} from "../models";
 
 import { createConnection } from "mysql2/promise";
 import invariant from "tiny-invariant";
@@ -31,12 +37,16 @@ async function getConnectionAsync(): Promise<Connection> {
   return connection;
 }
 
-export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
+export async function createEOIMentorAsync(
+  userForm: UserForm,
+): Promise<number> {
   const connection = await getConnectionAsync();
 
   await connection.beginTransaction();
 
-  const [chapters] = await connection.query<Chapter[]>("SELECT * FROM Chapter");
+  const [chapters] = await connection.query<DBChapter[]>(
+    "SELECT * FROM Chapter",
+  );
 
   const selectedChapter = userForm[
     "We operate out of the following locations, where would you prefer to mentor or volunteer?"
@@ -48,7 +58,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     (c) => c.name.trim().toLowerCase() === selectedChapter,
   );
 
-  const dbUser: User = {
+  const dbUser: DBUser = {
     azureADId: null,
     firstName: userForm["FIRST NAME:"],
     lastName: userForm["LAST NAME:"],
@@ -114,7 +124,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     ],
   );
 
-  const dbEoIProfile: EoIProfile = {
+  const dbEoIProfile: DBEoIProfile = {
     bestTimeToContact: userForm["When is the best time to contact you?"],
     occupation: userForm["Current occupation:"],
     volunteerExperience:
@@ -172,7 +182,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     ],
   );
 
-  const dbReference1: Reference = {
+  const dbReference1: DBReference = {
     firstName: userForm["REFEREE 1 - First Name:"],
     lastName: userForm["REFEREE 1 - Surname:"],
     mobile: userForm["REFEREE 1 - Mobile:"],
@@ -190,7 +200,7 @@ export async function createEOIUsersAsync(userForm: UserForm): Promise<number> {
     userId: resultSetHeader.insertId,
   };
 
-  const dbReference2: Reference = {
+  const dbReference2: DBReference = {
     firstName: userForm["REFEREE 2 - First Name:"],
     lastName: userForm["REFEREE 2 - Surname:"],
     mobile: userForm["REFEREE 2 - Mobile:"],

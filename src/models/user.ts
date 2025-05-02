@@ -1,4 +1,5 @@
 import type { RowDataPacket } from "mysql2/promise";
+import type { YesNoAnswer } from "./common";
 
 export type State =
   | "Western Australia"
@@ -33,8 +34,6 @@ export type HearAboutUs =
 export type Location = "Girrawheen" | "Armadale" | "Other";
 
 export type Frequency = "Every week" | "Twice a month";
-
-export type YesNoAnswer = "Yes" | "No";
 
 export interface UserForm {
   "FIRST NAME:": string; // user
@@ -72,7 +71,7 @@ export interface UserForm {
   "TELL US ABOUT YOU:": string | undefined;
 }
 
-export interface User {
+export interface DBUser {
   azureADId: string | null;
   email: string;
   firstName: string;
@@ -93,7 +92,7 @@ export interface User {
   chapterId: string;
 }
 
-export interface EoIProfile {
+export interface DBEoIProfile {
   bestTimeToContact: string;
   occupation: string;
   volunteerExperience: string;
@@ -108,7 +107,7 @@ export interface EoIProfile {
   userId: number;
 }
 
-export interface Reference {
+export interface DBReference {
   firstName: string;
   lastName: string;
   mobile: string;
@@ -125,7 +124,7 @@ export interface Reference {
   userId: number;
 }
 
-export interface Chapter extends RowDataPacket {
+export interface DBChapter extends RowDataPacket {
   id: string;
   name: string;
 }
