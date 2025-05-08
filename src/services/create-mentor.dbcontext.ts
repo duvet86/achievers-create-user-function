@@ -7,6 +7,9 @@ import type {
   DBReference,
 } from "../models";
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { createConnection } from "mysql2/promise";
 import invariant from "tiny-invariant";
 
@@ -15,12 +18,9 @@ invariant(process.env.DATABASE_USER);
 invariant(process.env.DATABASE_PASSWORD);
 invariant(process.env.DATABASE_NAME);
 
-// const serverCa = [
-//   fs.readFileSync(
-//     path.resolve(process.cwd(), "BaltimoreCyberTrustRoot.crt.pem"),
-//     "utf8"
-//   ),
-// ];
+const serverCa = [
+  readFileSync(resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"), "utf8"),
+];
 
 async function getConnectionAsync(): Promise<Connection> {
   const connection = await createConnection({
@@ -28,10 +28,10 @@ async function getConnectionAsync(): Promise<Connection> {
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    // ssl: {
-    //   rejectUnauthorized: true,
-    //   ca: serverCa,
-    // },
+    ssl: {
+      rejectUnauthorized: true,
+      ca: serverCa,
+    },
   });
 
   return connection;
