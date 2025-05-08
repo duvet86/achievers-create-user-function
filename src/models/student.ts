@@ -71,9 +71,10 @@ export interface DBEOIStudent {
   otherSupport: string;
   alreadyInAchievers: string;
   heardAboutUs: string;
-  preferredChapter: string;
+  chapterId: number;
   weeklyCommitment: boolean;
   hasApprovedToPublishPhotos: boolean;
+  schoolName: string;
 }
 
 export interface DBStudentGuardian {

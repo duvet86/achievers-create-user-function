@@ -1,40 +1,13 @@
-import type { Connection, ResultSetHeader } from "mysql2/promise";
+import type { ResultSetHeader } from "mysql2/promise";
 import type {
   StudentForm,
   DBEOIStudent,
   DBStudentGuardian,
   DBStudentTeacher,
+  DBChapter,
 } from "../models";
 
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-
-import { createConnection } from "mysql2/promise";
-import invariant from "tiny-invariant";
-
-invariant(process.env.DATABASE_HOST);
-invariant(process.env.DATABASE_USER);
-invariant(process.env.DATABASE_PASSWORD);
-invariant(process.env.DATABASE_NAME);
-
-const serverCa = [
-  readFileSync(resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"), "utf8"),
-];
-
-async function getConnectionAsync(): Promise<Connection> {
-  const connection = await createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-    ssl: {
-      rejectUnauthorized: true,
-      ca: serverCa,
-    },
-  });
-
-  return connection;
-}
+import { getConnectionAsync } from "./dbContext";
 
 export async function createEOIStudentAsync(
   studentForm: StudentForm,
@@ -42,6 +15,20 @@ export async function createEOIStudentAsync(
   const connection = await getConnectionAsync();
 
   await connection.beginTransaction();
+
+  const [chapters] = await connection.query<DBChapter[]>(
+    "SELECT * FROM Chapter",
+  );
+
+  const selectedChapter = studentForm[
+    "Which Chapter would you like your child to attend? "
+  ]
+    .trim()
+    .toLowerCase();
+
+  const preferredChapter = chapters.find(
+    (c) => c.name.trim().toLowerCase() === selectedChapter,
+  );
 
   const dbStudent: DBEOIStudent = {
     firstName: studentForm["FIRST NAME:"],
@@ -83,8 +70,9 @@ export async function createEOIStudentAsync(
         "HAS THE STUDENT ATTENDED THE ACHIEVERS CLUB BEFORE? IF SO, WHEN? "
       ],
     heardAboutUs: studentForm["Where did you hear about us?"].join(),
-    preferredChapter:
-      studentForm["Which Chapter would you like your child to attend? "],
+    chapterId: preferredChapter
+      ? Number(preferredChapter.id)
+      : Number(chapters[0].id),
     weeklyCommitment:
       studentForm[
         "The Achievers Club runs every Saturday during the school term, from 10:00 AM to 12:00 PM.\n\nIs your child able and willing to commit to attending each week?"
@@ -93,6 +81,7 @@ export async function createEOIStudentAsync(
       studentForm[
         "If this application is successful, I give permission for the Club—and its approved third parties, such as sponsors—to use and publish photographs of me and/or my child in print, digital, or online materials for the purpose of promoting the activities of the Club or its sponsors.\n(You may choose to decline permission. Doing so will not affect your application. If you have any concerns regarding the use of photographs, please let us know.)"
       ] === "Yes",
+    schoolName: studentForm["SCHOOL'S FULL NAME:"],
   };
 
   const [resultSetHeader] = await connection.query<ResultSetHeader>(
@@ -117,12 +106,13 @@ export async function createEOIStudentAsync(
         otherSupport,
         alreadyInAchievers,
         heardAboutUs,
-        preferredChapter,
+        chapterId,
         weeklyCommitment,
         hasApprovedToPublishPhotos,
+        schoolName,
         createdAt,
         updatedAt)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbStudent.firstName,
       dbStudent.lastName,
@@ -144,9 +134,10 @@ export async function createEOIStudentAsync(
       dbStudent.otherSupport,
       dbStudent.alreadyInAchievers,
       dbStudent.heardAboutUs,
-      dbStudent.preferredChapter,
+      dbStudent.chapterId,
       dbStudent.weeklyCommitment,
       dbStudent.hasApprovedToPublishPhotos,
+      dbStudent.schoolName,
       new Date(),
       new Date(),
     ],

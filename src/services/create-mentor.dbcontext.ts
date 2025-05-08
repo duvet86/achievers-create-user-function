@@ -1,4 +1,4 @@
-import type { Connection, ResultSetHeader } from "mysql2/promise";
+import type { ResultSetHeader } from "mysql2/promise";
 import type {
   UserForm,
   DBUser,
@@ -7,35 +7,7 @@ import type {
   DBReference,
 } from "../models";
 
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-
-import { createConnection } from "mysql2/promise";
-import invariant from "tiny-invariant";
-
-invariant(process.env.DATABASE_HOST);
-invariant(process.env.DATABASE_USER);
-invariant(process.env.DATABASE_PASSWORD);
-invariant(process.env.DATABASE_NAME);
-
-const serverCa = [
-  readFileSync(resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"), "utf8"),
-];
-
-async function getConnectionAsync(): Promise<Connection> {
-  const connection = await createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-    ssl: {
-      rejectUnauthorized: true,
-      ca: serverCa,
-    },
-  });
-
-  return connection;
-}
+import { getConnectionAsync } from "./dbContext";
 
 export async function createEOIMentorAsync(
   userForm: UserForm,
