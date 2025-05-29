@@ -4,15 +4,14 @@ dotenv.config();
 
 import { app } from "@azure/functions";
 
-import { createMentor } from "./services/create-mentor";
-import { createStudent } from "./services/create-student";
+import { createMentor, createStudentApplication } from "./services/";
 
 app.http("create-user", {
   methods: ["POST"],
   handler: createMentor,
 });
 
-app.http("create-student", {
+app.http("create-student-application", {
   methods: ["POST"],
-  handler: createStudent,
+  handler: createStudentApplication,
 });

@@ -3,13 +3,13 @@ import type {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import type { StudentForm } from "../models";
+import type { StudentForm } from "../../models";
 
 import { HTTP_STATUS_CODES } from "~/src/services";
 
 import { createEOIStudentAsync } from "./create-student.dbcontext";
 
-export async function createStudent(
+export async function createStudentApplication(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {

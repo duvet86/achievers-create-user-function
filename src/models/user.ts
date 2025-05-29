@@ -38,6 +38,7 @@ export type Frequency = "Every week" | "Twice a month";
 export interface UserForm {
   "FIRST NAME:": string; // user
   "LAST NAME:": string; // user
+  "PREFERRED NAME (if different):": string; // user
   "MOBILE:": string; // user
   "EMAIL:": string; // azure
   "When is the best time to contact you?": string; // user form
@@ -52,20 +53,22 @@ export interface UserForm {
   "If you have indicated that you are comfortable mentoring a student at year 10 or above, what subjects are you most comfortable concentrating on?": string[];
   "Where did you hear about us?": HearAboutUs[]; // user form
   "Why would you like to become a Mentor or Volunteer?": string; // user form
+  "Have you volunteered with us before? If so, when?": string;
+  "LinkedIn profile link (if you have one):": string;
   "We operate out of the following locations, where would you prefer to mentor or volunteer?": Location; // user form
-  "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often do you think you will be able to attend? ": Frequency[]; // user form
+  "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? ": Frequency[]; // user form
   "REFEREE 1 - First Name:": string; // user form
   "REFEREE 1 - Surname:": string; // user form
   "REFEREE 1 - Mobile:": string; // user form
   "REFEREE 1 - Email:": string; // user form
   "REFEREE 1 - When is the best time to contact referee 1?": string; // user form
-  "REFEREE 1 - How they know you:": string; // user form
+  "REFEREE 1 - How do they know you?": string; // user form
   "REFEREE 2 - First Name:": string; // user form
   "REFEREE 2 - Surname:": string; // user form
   "REFEREE 2 - Mobile:": string; // user form
   "REFEREE 2 - Email:": string; // user form
   "REFEREE 2 - When is the best time to contact referee 2?": string; // user form
-  "REFEREE 2 - How they know you:": string; // user form
+  "REFEREE 2 - How do they know you?": string; // user form
   "I am over 18 years of age:": YesNoAnswer; // user
   "To the best of my knowledge all details I have provided on this form are true and correct. I understand that submission of this form does not guarantee me a volunteer role at the Achievers Club WA:": YesNoAnswer[];
   "TELL US ABOUT YOU:": string | undefined;
@@ -76,6 +79,7 @@ export interface DBUser {
   email: string;
   firstName: string;
   lastName: string;
+  preferredName: string | null;
   mobile: string;
   addressStreet: string;
   addressSuburb: string;
@@ -104,6 +108,8 @@ export interface DBEoIProfile {
   isOver18: boolean;
   comment: string;
   aboutMe: string | null;
+  linkedInProfile: string | null;
+  wasMentor: string;
   userId: number;
 }
 

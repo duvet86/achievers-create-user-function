@@ -3,7 +3,7 @@ import type {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import type { UserForm } from "../models/user";
+import type { UserForm } from "../../models/user";
 
 import { HTTP_STATUS_CODES, getAzureUserByMailAsync } from "~/src/services";
 

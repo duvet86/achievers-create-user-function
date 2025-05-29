@@ -5,9 +5,9 @@ import type {
   DBEoIProfile,
   DBChapter,
   DBReference,
-} from "../models";
+} from "../../models";
 
-import { getConnectionAsync } from "./dbContext";
+import { getConnectionAsync } from "../dbContext";
 
 export async function createEOIMentorAsync(
   userForm: UserForm,
@@ -34,6 +34,7 @@ export async function createEOIMentorAsync(
     azureADId: null,
     firstName: userForm["FIRST NAME:"],
     lastName: userForm["LAST NAME:"],
+    preferredName: userForm["PREFERRED NAME (if different):"] ?? null,
     mobile: userForm["MOBILE:"],
     email: userForm["EMAIL:"],
     addressState: userForm["ADDRESS - STATE:"],
@@ -57,6 +58,7 @@ export async function createEOIMentorAsync(
         email,
         firstName,
         lastName,
+        preferredName,
         mobile,
         addressStreet,
         addressSuburb,
@@ -72,12 +74,13 @@ export async function createEOIMentorAsync(
         endDate,
         updatedAt,
         chapterId)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbUser.azureADId,
       dbUser.email,
       dbUser.firstName,
       dbUser.lastName,
+      dbUser.preferredName,
       dbUser.mobile,
       dbUser.addressStreet,
       dbUser.addressSuburb,
@@ -109,7 +112,7 @@ export async function createEOIMentorAsync(
     heardAboutUs: userForm["Where did you hear about us?"].join(", "),
     preferredFrequency:
       userForm[
-        "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often do you think you will be able to attend? "
+        "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? "
       ].join(" - "),
     preferredSubject:
       userForm[
@@ -118,6 +121,9 @@ export async function createEOIMentorAsync(
     isOver18: userForm["I am over 18 years of age:"] === "Yes",
     comment: userForm["Why would you like to become a Mentor or Volunteer?"],
     aboutMe: userForm["TELL US ABOUT YOU:"] ?? null,
+    linkedInProfile:
+      userForm["LinkedIn profile link (if you have one):"] ?? null,
+    wasMentor: userForm["Have you volunteered with us before? If so, when?"],
     userId: resultSetHeader.insertId,
   };
 
@@ -134,9 +140,11 @@ export async function createEOIMentorAsync(
         isOver18,
         comment,
         aboutMe,
+        linkedInProfile,
+        wasMentor,
         userId,
         updatedAt)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbEoIProfile.bestTimeToContact,
       dbEoIProfile.occupation,
@@ -149,6 +157,8 @@ export async function createEOIMentorAsync(
       dbEoIProfile.isOver18,
       dbEoIProfile.comment,
       dbEoIProfile.aboutMe,
+      dbEoIProfile.linkedInProfile,
+      dbEoIProfile.wasMentor,
       dbEoIProfile.userId,
       new Date(),
     ],
@@ -161,7 +171,7 @@ export async function createEOIMentorAsync(
     email: userForm["REFEREE 1 - Email:"],
     bestTimeToContact:
       userForm["REFEREE 1 - When is the best time to contact referee 1?"],
-    relationship: userForm["REFEREE 1 - How they know you:"],
+    relationship: userForm["REFEREE 1 - How do they know you?"],
     generalComment: null,
     outcomeComment: null,
     hasKnowApplicantForAYear: null,
@@ -179,7 +189,7 @@ export async function createEOIMentorAsync(
     email: userForm["REFEREE 2 - Email:"],
     bestTimeToContact:
       userForm["REFEREE 2 - When is the best time to contact referee 2?"],
-    relationship: userForm["REFEREE 2 - How they know you:"],
+    relationship: userForm["REFEREE 2 - How do they know you?"],
     generalComment: null,
     outcomeComment: null,
     hasKnowApplicantForAYear: null,
