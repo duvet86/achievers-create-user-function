@@ -30,11 +30,27 @@ export async function createEOIMentorAsync(
     (c) => c.name.trim().toLowerCase() === selectedChapter,
   );
 
+  const frequency =
+    userForm[
+      "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? "
+    ].join(" ");
+
+  let frequencyInDays = null;
+  if (frequency.includes("Fortnightly")) {
+    frequencyInDays = 14;
+  } else if (frequency.includes("Weekly")) {
+    frequencyInDays = 7;
+  }
+
   const dbUser: DBUser = {
     azureADId: null,
     firstName: userForm["FIRST NAME:"],
     lastName: userForm["LAST NAME:"],
-    preferredName: userForm["PREFERRED NAME (if different):"] ?? null,
+    preferredName:
+      !userForm["PREFERRED NAME (if different):"] ||
+      userForm["PREFERRED NAME (if different):"].trim() === ""
+        ? null
+        : userForm["PREFERRED NAME (if different):"].trim(),
     mobile: userForm["MOBILE:"],
     email: userForm["EMAIL:"],
     addressState: userForm["ADDRESS - STATE:"],
@@ -48,8 +64,7 @@ export async function createEOIMentorAsync(
     emergencyContactName: null,
     emergencyContactNumber: null,
     emergencyContactRelationship: null,
-    endDate: null,
-    profilePicturePath: null,
+    frequencyInDays,
   };
 
   const [resultSetHeader] = await connection.query<ResultSetHeader>(
@@ -70,11 +85,10 @@ export async function createEOIMentorAsync(
         emergencyContactNumber,
         emergencyContactAddress,
         emergencyContactRelationship,
-        profilePicturePath,
-        endDate,
+        frequencyInDays,
         updatedAt,
         chapterId)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       dbUser.azureADId,
       dbUser.email,
@@ -92,8 +106,7 @@ export async function createEOIMentorAsync(
       dbUser.emergencyContactNumber,
       dbUser.emergencyContactAddress,
       dbUser.emergencyContactRelationship,
-      dbUser.profilePicturePath,
-      dbUser.endDate,
+      dbUser.frequencyInDays,
       new Date(),
       dbUser.chapterId,
     ],

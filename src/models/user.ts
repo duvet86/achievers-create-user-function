@@ -33,7 +33,7 @@ export type HearAboutUs =
 
 export type Location = "Girrawheen" | "Armadale" | "Other";
 
-export type Frequency = "Every week" | "Twice a month";
+export type Frequency = "Weekly" | "Fortnightly" | string;
 
 export interface UserForm {
   "FIRST NAME:": string; // user
@@ -91,9 +91,8 @@ export interface DBUser {
   emergencyContactNumber: string | null;
   emergencyContactAddress: string | null;
   emergencyContactRelationship: string | null;
-  profilePicturePath: string | null;
-  endDate: Date | null;
   chapterId: string;
+  frequencyInDays: number | null;
 }
 
 export interface DBEoIProfile {
