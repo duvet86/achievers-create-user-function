@@ -68,7 +68,7 @@ export async function createEOIMentorAsync(
   };
 
   const [resultSetHeader] = await connection.query<ResultSetHeader>(
-    `INSERT INTO user (
+    `INSERT INTO mentor (
         azureADId,
         email,
         firstName,
@@ -137,7 +137,7 @@ export async function createEOIMentorAsync(
     linkedInProfile:
       userForm["LinkedIn profile link (if you have one):"] ?? null,
     wasMentor: userForm["Have you volunteered with us before? If so, when?"],
-    userId: resultSetHeader.insertId,
+    mentorId: resultSetHeader.insertId,
   };
 
   await connection.query<ResultSetHeader>(
@@ -155,7 +155,7 @@ export async function createEOIMentorAsync(
         aboutMe,
         linkedInProfile,
         wasMentor,
-        userId,
+        mentorId,
         updatedAt)
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
@@ -172,7 +172,7 @@ export async function createEOIMentorAsync(
       dbEoIProfile.aboutMe,
       dbEoIProfile.linkedInProfile,
       dbEoIProfile.wasMentor,
-      dbEoIProfile.userId,
+      dbEoIProfile.mentorId,
       new Date(),
     ],
   );
@@ -192,7 +192,7 @@ export async function createEOIMentorAsync(
     isMentorRecommended: null,
     calledBy: null,
     calledOndate: null,
-    userId: resultSetHeader.insertId,
+    mentorId: resultSetHeader.insertId,
   };
 
   const dbReference2: DBReference = {
@@ -210,7 +210,7 @@ export async function createEOIMentorAsync(
     isMentorRecommended: null,
     calledBy: null,
     calledOndate: null,
-    userId: resultSetHeader.insertId,
+    mentorId: resultSetHeader.insertId,
   };
 
   await connection.query<ResultSetHeader>(
@@ -228,7 +228,7 @@ export async function createEOIMentorAsync(
         isMentorRecommended,
         calledBy,
         calledOndate,
-        userId,
+        mentorId,
         updatedAt)
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?),
         (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
@@ -246,7 +246,7 @@ export async function createEOIMentorAsync(
       dbReference1.isMentorRecommended,
       dbReference1.calledBy,
       dbReference1.calledOndate,
-      dbReference1.userId,
+      dbReference1.mentorId,
       new Date(),
       // -----------
       dbReference2.firstName,
@@ -262,7 +262,7 @@ export async function createEOIMentorAsync(
       dbReference2.isMentorRecommended,
       dbReference2.calledBy,
       dbReference2.calledOndate,
-      dbReference2.userId,
+      dbReference2.mentorId,
       new Date(),
     ],
   );

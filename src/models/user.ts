@@ -109,7 +109,7 @@ export interface DBEoIProfile {
   aboutMe: string | null;
   linkedInProfile: string | null;
   wasMentor: string;
-  userId: number;
+  mentorId: number;
 }
 
 export interface DBReference {
@@ -126,7 +126,7 @@ export interface DBReference {
   isMentorRecommended: boolean | null;
   calledBy: string | null;
   calledOndate: Date | null;
-  userId: number;
+  mentorId: number;
 }
 
 export interface DBChapter extends RowDataPacket {
