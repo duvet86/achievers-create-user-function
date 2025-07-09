@@ -5,6 +5,7 @@ dotenv.config();
 import { app } from "@azure/functions";
 
 import { createMentor, createStudentApplication } from "./services/";
+import { testDB } from "./services/tes-db";
 
 app.http("create-user", {
   methods: ["POST"],
@@ -14,4 +15,9 @@ app.http("create-user", {
 app.http("create-student-application", {
   methods: ["POST"],
   handler: createStudentApplication,
+});
+
+app.http("test-db", {
+  methods: ["GET"],
+  handler: testDB,
 });

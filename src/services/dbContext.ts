@@ -11,10 +11,6 @@ invariant(process.env.DATABASE_USER);
 invariant(process.env.DATABASE_PASSWORD);
 invariant(process.env.DATABASE_NAME);
 
-const serverCa = [
-  readFileSync(resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"), "utf8"),
-];
-
 export async function getConnectionAsync(): Promise<Connection> {
   const connection = await createConnection({
     host: process.env.DATABASE_HOST,
@@ -25,7 +21,10 @@ export async function getConnectionAsync(): Promise<Connection> {
       process.env.NODE_ENV === "production"
         ? {
             rejectUnauthorized: true,
-            ca: serverCa,
+            ca: readFileSync(
+              resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"),
+              "utf8",
+            ),
           }
         : undefined,
   });
