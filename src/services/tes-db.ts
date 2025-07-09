@@ -16,12 +16,16 @@ export async function testDB(
 
   const connection = await getConnectionAsync();
 
-  const [chapters] = await connection.query<DBChapter[]>(
-    "SELECT * FROM Chapter",
-  );
+  try {
+    const [chapters] = await connection.query<DBChapter[]>(
+      "SELECT * FROM Chapter",
+    );
 
-  return {
-    status: HTTP_STATUS_CODES.CREATED,
-    body: JSON.stringify(chapters),
-  };
+    return {
+      status: HTTP_STATUS_CODES.CREATED,
+      body: JSON.stringify(chapters),
+    };
+  } finally {
+    connection.destroy();
+  }
 }
