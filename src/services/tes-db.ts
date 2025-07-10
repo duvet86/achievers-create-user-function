@@ -22,7 +22,7 @@ export async function testDB(
     );
 
     return {
-      status: HTTP_STATUS_CODES.CREATED,
+      status: HTTP_STATUS_CODES.OK,
       body: JSON.stringify(chapters),
     };
   } finally {

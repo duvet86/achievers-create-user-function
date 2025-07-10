@@ -309,6 +309,10 @@ export async function createEOIStudentAsync(
     await connection.end();
 
     return resultSetHeader.insertId;
+  } catch (e) {
+    await connection.rollback();
+
+    throw e;
   } finally {
     connection.destroy();
   }
