@@ -147,23 +147,23 @@ export async function createEOIStudentAsync(
     const dbStudentGuardian1: DBStudentGuardian = {
       fullName: studentForm["PARENT/GUARDIAN 1 - FULL NAME:"],
       preferredName:
-        studentForm["PARENT/GUARDIAN 1 - PREFERRED NAME (if different):"],
+        studentForm["PARENT/GUARDIAN 1 -  PREFERRED NAME (if different):"],
       relationship:
-        studentForm["PARENT/GUARDIAN 1 - RELATIONSHIP WITH STUDENT:"],
-      phone: studentForm["PARENT/GUARDIAN 1 - MOBILE:"],
-      email: studentForm["PARENT/GUARDIAN 1 - EMAIL:"],
-      address: studentForm["PARENT/GUARDIAN 1 - FULL ADDRESS: "],
+        studentForm["PARENT/GUARDIAN 1 -  RELATIONSHIP WITH STUDENT:"],
+      phone: studentForm["PARENT/GUARDIAN 1 -  MOBILE:"],
+      email: studentForm["PARENT/GUARDIAN 1 -  EMAIL:"],
+      address: studentForm["PARENT/GUARDIAN 1 -  FULL ADDRESS: "],
     };
 
     const dbStudentGuardian2: DBStudentGuardian = {
       fullName: studentForm["PARENT/GUARDIAN 2 - FULL NAME:"],
       preferredName:
-        studentForm["PARENT/GUARDIAN 2 - PREFERRED NAME (if different):"],
+        studentForm["PARENT/GUARDIAN 2 -  PREFERRED NAME (if different):"],
       relationship:
-        studentForm["PARENT/GUARDIAN 2 - RELATIONSHIP WITH STUDENT:"],
-      phone: studentForm["PARENT/GUARDIAN 2 - MOBILE:"],
-      email: studentForm["PARENT/GUARDIAN 2 - EMAIL:"],
-      address: studentForm["PARENT/GUARDIAN 2 - FULL ADDRESS: "],
+        studentForm["PARENT/GUARDIAN 2 -  RELATIONSHIP WITH STUDENT:"],
+      phone: studentForm["PARENT/GUARDIAN 2 -  MOBILE:"],
+      email: studentForm["PARENT/GUARDIAN 2 -  EMAIL:"],
+      address: studentForm["PARENT/GUARDIAN 2 -  FULL ADDRESS: "],
     };
 
     await connection.query<ResultSetHeader>(
