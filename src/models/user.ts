@@ -46,17 +46,17 @@ export interface UserForm {
   "ADDRESS - SUBURB:": string; // user
   "ADDRESS - STATE:": State; // user
   "ADDRESS - POSTCODE:": string; // user
-  "Current occupation:": string; // user form
-  "Relevant work/volunteer experience (if any):": string; // user form
+  "Tell us about your current occupation:": string; // user form
+  "Tell us about your background (personal, professional, or volunteer) that you feel is relevant to mentoring:": string; // user form
   "What role(s) would you be interested in?": Role[]; // user form
-  "What level(s) would you be comfortable mentoring at?": MentoringLevel[]; // user form
-  "If you have indicated that you are comfortable mentoring a student at year 10 or above, what subjects are you most comfortable concentrating on?": string[];
+  "What level(s) would you be comfortable mentoring/tutoring at?": MentoringLevel[]; // user form
+  "If you have indicated that you are comfortable mentoring a student at Year 10 or above, what subjects are you most comfortable concentrating on?": string[];
   "Where did you hear about us?": HearAboutUs[]; // user form
-  "Why would you like to become a Mentor or Volunteer?": string; // user form
+  "Why would you like to become a Volunteer? Please share your motivations and reasons for applying to join our team. ": string; // user form
   "Have you volunteered with us before? If so, when?": string;
   "LinkedIn profile link (if you have one):": string;
-  "We operate out of the following locations, where would you prefer to mentor or volunteer?": Location; // user form
-  "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? ": Frequency[]; // user form
+  "Which of the following locations would you prefer to mentor or volunteer at?": Location; // user form
+  "Our Club runs from 10:00 AM to 12:00 PM every Saturday during school terms. How often would you like to attend? ": Frequency[]; // user form
   "REFEREE 1 - First Name:": string; // user form
   "REFEREE 1 - Surname:": string; // user form
   "REFEREE 1 - Mobile:": string; // user form

@@ -22,7 +22,7 @@ export async function createEOIMentorAsync(
     );
 
     const selectedChapter = userForm[
-      "We operate out of the following locations, where would you prefer to mentor or volunteer?"
+      "Which of the following locations would you prefer to mentor or volunteer at?"
     ]
       .trim()
       .toLowerCase();
@@ -33,7 +33,7 @@ export async function createEOIMentorAsync(
 
     const frequency =
       userForm[
-        "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? "
+        "Our Club runs from 10:00 AM to 12:00 PM every Saturday during school terms. How often would you like to attend? "
       ].join(" ");
 
     let frequencyInDays = null;
@@ -115,25 +115,30 @@ export async function createEOIMentorAsync(
 
     const dbEoIProfile: DBEoIProfile = {
       bestTimeToContact: userForm["When is the best time to contact you?"],
-      occupation: userForm["Current occupation:"],
+      occupation: userForm["Tell us about your current occupation:"],
       volunteerExperience:
-        userForm["Relevant work/volunteer experience (if any):"],
+        userForm[
+          "Tell us about your background (personal, professional, or volunteer) that you feel is relevant to mentoring:"
+        ],
       role: userForm["What role(s) would you be interested in?"].join(", "),
       mentoringLevel:
-        userForm["What level(s) would you be comfortable mentoring at?"].join(
-          ", ",
-        ),
+        userForm[
+          "What level(s) would you be comfortable mentoring/tutoring at?"
+        ].join(", "),
       heardAboutUs: userForm["Where did you hear about us?"].join(", "),
       preferredFrequency:
         userForm[
-          "Our homework club runs from 10:00 AM to 12:00 PM every Saturday during school term-time. How often are you able to attend? "
+          "Our Club runs from 10:00 AM to 12:00 PM every Saturday during school terms. How often would you like to attend? "
         ].join(" - "),
       preferredSubject:
         userForm[
-          "If you have indicated that you are comfortable mentoring a student at year 10 or above, what subjects are you most comfortable concentrating on?"
+          "If you have indicated that you are comfortable mentoring a student at Year 10 or above, what subjects are you most comfortable concentrating on?"
         ].join(", "),
       isOver18: userForm["I am over 18 years of age:"] === "Yes",
-      comment: userForm["Why would you like to become a Mentor or Volunteer?"],
+      comment:
+        userForm[
+          "Why would you like to become a Volunteer? Please share your motivations and reasons for applying to join our team. "
+        ],
       aboutMe: userForm["TELL US ABOUT YOU:"] ?? null,
       linkedInProfile:
         userForm["LinkedIn profile link (if you have one):"] ?? null,
