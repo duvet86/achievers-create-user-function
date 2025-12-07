@@ -1,7 +1,7 @@
 import type { Connection } from "mysql2/promise";
 
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+// import { readFileSync } from "node:fs";
+// import { resolve } from "node:path";
 
 import { createConnection } from "mysql2/promise";
 import invariant from "tiny-invariant";
@@ -17,16 +17,16 @@ export async function getConnectionAsync(): Promise<Connection> {
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    ssl:
-      process.env.NODE_ENV === "production"
-        ? {
-            rejectUnauthorized: true,
-            ca: readFileSync(
-              resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"),
-              "utf8",
-            ),
-          }
-        : undefined,
+    // ssl:
+    //   process.env.NODE_ENV === "production"
+    //     ? {
+    //         rejectUnauthorized: true,
+    //         ca: readFileSync(
+    //           resolve(process.cwd(), "DigiCertGlobalRootCA.crt.pem"),
+    //           "utf8",
+    //         ),
+    //       }
+    //     : undefined,
   });
 
   return connection;
