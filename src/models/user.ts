@@ -46,7 +46,7 @@ export interface UserForm {
   "ADDRESS - SUBURB:": string; // user
   "ADDRESS - STATE:": State; // user
   "ADDRESS - POSTCODE:": string; // user
-  "Tell us about your current occupation:": string; // user form
+  "Tell us about your current occupation and studies:": string; // user form
   "Tell us about your background (personal, professional, or volunteer) that you feel is relevant to mentoring:": string; // user form
   "What role(s) would you be interested in?": Role[]; // user form
   "What level(s) would you be comfortable mentoring/tutoring at?": MentoringLevel[]; // user form

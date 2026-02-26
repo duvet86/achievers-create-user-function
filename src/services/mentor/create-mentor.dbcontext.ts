@@ -115,7 +115,8 @@ export async function createEOIMentorAsync(
 
     const dbEoIProfile: DBEoIProfile = {
       bestTimeToContact: userForm["When is the best time to contact you?"],
-      occupation: userForm["Tell us about your current occupation:"],
+      occupation:
+        userForm["Tell us about your current occupation and studies:"],
       volunteerExperience:
         userForm[
           "Tell us about your background (personal, professional, or volunteer) that you feel is relevant to mentoring:"
