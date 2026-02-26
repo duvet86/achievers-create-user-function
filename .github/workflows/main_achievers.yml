@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node LTS Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
           cache: "npm"
@@ -38,14 +38,6 @@ jobs:
           npm prune --production
           popd
 
-      # - name: "Run Azure Functions Action"
-      #   uses: azure/login@v2
-      #   id: fa
-      #   with:
-      #     app-name: "achievers"
-      #     slot-name: "Production"
-      #     package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-      #     publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3D112C5E689545DAAEED3F7F2AA48D87 }}
       - name: "Log in to Azure with AZ CLI"
         uses: azure/login@v2
         with:
