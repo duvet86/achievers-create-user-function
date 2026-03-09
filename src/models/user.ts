@@ -39,6 +39,7 @@ export interface UserForm {
   "FIRST NAME:": string; // user
   "LAST NAME:": string; // user
   "PREFERRED NAME (if different):": string; // user
+  "DATE OF BIRTH: ": string; // user
   "MOBILE:": string; // user
   "EMAIL:": string; // azure
   "When is the best time to contact you?": string; // user form

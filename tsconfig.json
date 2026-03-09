@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "module": "commonjs",
     "target": "es6",
     "outDir": "dist",
@@ -11,7 +10,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["./*"]
     }
   }
 }

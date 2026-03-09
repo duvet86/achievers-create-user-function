@@ -60,7 +60,12 @@ export async function createEOIMentorAsync(
       addressPostcode: userForm["ADDRESS - POSTCODE:"],
       additionalEmail: null,
       chapterId: preferredChapter?.id ?? chapters[0].id,
-      dateOfBirth: null,
+      dateOfBirth:
+        userForm["DATE OF BIRTH: "] !== null &&
+        userForm["DATE OF BIRTH: "] !== undefined &&
+        userForm["DATE OF BIRTH: "].trim() !== ""
+          ? new Date(userForm["DATE OF BIRTH: "])
+          : null,
       emergencyContactAddress: null,
       emergencyContactName: null,
       emergencyContactNumber: null,
