@@ -49,6 +49,7 @@ export interface UserForm {
   "ADDRESS - POSTCODE:": string; // user
   "Tell us about your current occupation and studies:": string; // user form
   "Tell us about your background (personal, professional, or volunteer) that you feel is relevant to mentoring:": string; // user form
+  "What professional skills, qualifications, experience or hobbies do you have that you think could be useful to our Club?": string[];
   "What role(s) would you be interested in?": Role[]; // user form
   "What level(s) would you be comfortable mentoring/tutoring at?": MentoringLevel[]; // user form
   "If you have indicated that you are comfortable mentoring a student at Year 10 or above, what subjects are you most comfortable concentrating on?": string[];
@@ -94,6 +95,7 @@ export interface DBUser {
   emergencyContactRelationship: string | null;
   chapterId: string;
   frequencyInDays: number | null;
+  skillOther: string | null;
 }
 
 export interface DBEoIProfile {
@@ -133,4 +135,9 @@ export interface DBReference {
 export interface DBChapter extends RowDataPacket {
   id: string;
   name: string;
+}
+
+export interface DBSkill extends RowDataPacket {
+  id: string;
+  label: string;
 }

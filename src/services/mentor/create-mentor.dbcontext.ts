@@ -5,6 +5,7 @@ import type {
   DBEoIProfile,
   DBChapter,
   DBReference,
+  DBSkill,
 } from "../../models";
 
 import { getConnectionAsync } from "../dbContext";
@@ -17,9 +18,11 @@ export async function createEOIMentorAsync(
   try {
     await connection.beginTransaction();
 
-    const [chapters] = await connection.query<DBChapter[]>(
+    const [dbChapters] = await connection.query<DBChapter[]>(
       "SELECT * FROM Chapter",
     );
+
+    const [dbSkills] = await connection.query<DBSkill[]>("SELECT * FROM Skill");
 
     const selectedChapter = userForm[
       "Which of the following locations would you prefer to mentor or volunteer at?"
@@ -27,7 +30,7 @@ export async function createEOIMentorAsync(
       .trim()
       .toLowerCase();
 
-    const preferredChapter = chapters.find(
+    const preferredChapter = dbChapters.find(
       (c) => c.name.trim().toLowerCase() === selectedChapter,
     );
 
@@ -41,6 +44,16 @@ export async function createEOIMentorAsync(
       frequencyInDays = 14;
     } else if (frequency.includes("Weekly")) {
       frequencyInDays = 7;
+    }
+
+    const eoiMentorSkill =
+      userForm[
+        "What professional skills, qualifications, experience or hobbies do you have that you think could be useful to our Club?"
+      ];
+
+    let skillOther: string | null = null;
+    if (eoiMentorSkill.filter((p) => p == "Other").length > 0) {
+      skillOther = eoiMentorSkill[0];
     }
 
     const dbUser: DBUser = {
@@ -59,7 +72,7 @@ export async function createEOIMentorAsync(
       addressStreet: userForm["ADDRESS - STREET:"],
       addressPostcode: userForm["ADDRESS - POSTCODE:"],
       additionalEmail: null,
-      chapterId: preferredChapter?.id ?? chapters[0].id,
+      chapterId: preferredChapter?.id ?? dbChapters[0].id,
       dateOfBirth:
         userForm["DATE OF BIRTH: "] !== null &&
         userForm["DATE OF BIRTH: "] !== undefined &&
@@ -71,9 +84,10 @@ export async function createEOIMentorAsync(
       emergencyContactNumber: null,
       emergencyContactRelationship: null,
       frequencyInDays,
+      skillOther,
     };
 
-    const [resultSetHeader] = await connection.query<ResultSetHeader>(
+    const [mentorResultSetHeader] = await connection.query<ResultSetHeader>(
       `INSERT INTO Mentor (
           azureADId,
           email,
@@ -93,8 +107,9 @@ export async function createEOIMentorAsync(
           emergencyContactRelationship,
           frequencyInDays,
           updatedAt,
-          chapterId)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          chapterId,
+          skillOther)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         dbUser.azureADId,
         dbUser.email,
@@ -115,8 +130,26 @@ export async function createEOIMentorAsync(
         dbUser.frequencyInDays,
         new Date(),
         dbUser.chapterId,
+        dbUser.skillOther,
       ],
     );
+
+    const mentorSkillIds = dbSkills
+      .map((dbSkill) => {
+        if (eoiMentorSkill.includes(dbSkill.label)) {
+          return dbSkill.id;
+        }
+
+        return null;
+      })
+      .filter((p) => p !== null);
+
+    for (const skillId of mentorSkillIds) {
+      await connection.query<ResultSetHeader>(
+        `INSERT INTO MentorSkill (skillId, mentorId) VALUES (?,?)`,
+        [skillId, mentorResultSetHeader.insertId],
+      );
+    }
 
     const dbEoIProfile: DBEoIProfile = {
       bestTimeToContact: userForm["When is the best time to contact you?"],
@@ -149,7 +182,7 @@ export async function createEOIMentorAsync(
       linkedInProfile:
         userForm["LinkedIn profile link (if you have one):"] ?? null,
       wasMentor: userForm["Have you volunteered with us before? If so, when?"],
-      mentorId: resultSetHeader.insertId,
+      mentorId: mentorResultSetHeader.insertId,
     };
 
     await connection.query<ResultSetHeader>(
@@ -204,7 +237,7 @@ export async function createEOIMentorAsync(
       isMentorRecommended: null,
       calledBy: null,
       calledOndate: null,
-      mentorId: resultSetHeader.insertId,
+      mentorId: mentorResultSetHeader.insertId,
     };
 
     const dbReference2: DBReference = {
@@ -222,7 +255,7 @@ export async function createEOIMentorAsync(
       isMentorRecommended: null,
       calledBy: null,
       calledOndate: null,
-      mentorId: resultSetHeader.insertId,
+      mentorId: mentorResultSetHeader.insertId,
     };
 
     await connection.query<ResultSetHeader>(
@@ -283,7 +316,7 @@ export async function createEOIMentorAsync(
 
     await connection.end();
 
-    return resultSetHeader.insertId;
+    return mentorResultSetHeader.insertId;
   } catch (e) {
     await connection.rollback();
 
