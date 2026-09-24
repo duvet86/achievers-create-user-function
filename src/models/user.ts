@@ -25,11 +25,7 @@ export type MentoringLevel =
   | "Not applicable";
 
 export type HearAboutUs =
-  | "Word of mouth"
-  | "Volunteering WA"
-  | "Seek"
-  | "UWA"
-  | "Curtin";
+  "Word of mouth" | "Volunteering WA" | "Seek" | "UWA" | "Curtin";
 
 export type Location = "Girrawheen" | "Armadale" | "Other";
 
@@ -112,7 +108,7 @@ export interface DBEoIProfile {
   aboutMe: string | null;
   linkedInProfile: string | null;
   wasMentor: string;
-  mentorId: number;
+  volunteerId: number;
 }
 
 export interface DBReference {
@@ -129,7 +125,7 @@ export interface DBReference {
   isMentorRecommended: boolean | null;
   calledBy: string | null;
   calledOndate: Date | null;
-  mentorId: number;
+  volunteerId: number;
 }
 
 export interface DBChapter extends RowDataPacket {
